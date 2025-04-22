@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TanuCanvas Mini</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .neon-glow {
+            box-shadow: 0 0 15px rgba(66, 220, 255, 0.3),
+                        0 0 30px rgba(66, 220, 255, 0.2);
+        }
+        .shimmer {
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0.1) 0%,
+                rgba(255, 255, 255, 0.2) 50%,
+                rgba(255, 255, 255, 0.1) 100%
+            );
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .response-card {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-3xl">
+        <!-- Header -->
+        <h1 class="text-4xl md:text-5xl font-bold text-center text-white mb-8 leading-tight">
+            TanuCanvas Mini
+            <span class="block text-xl md:text-2xl text-blue-400 mt-2">Build Anything. Just by Thinking.</span>
+        </h1>
+
+        <!-- Input Section -->
+        <div class="space-y-4">
+            <textarea 
+                id="prompt-input"
+                class="w-full h-32 p-4 rounded-lg bg-gray-800 text-white border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none transition duration-200"
+                placeholder="Enter your prompt here..."
+            ></textarea>
+            <button 
+                onclick="generateResponse()"
+                class="w-full py-3 px-6 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold transition duration-200 neon-glow"
+                id="generate-btn"
+            >
+                Generate <i class="bi bi-lightning-charge-fill ml-2"></i>
+            </button>
+        </div>
+
+        <!-- Response Section -->
+        <div id="loading" class="hidden mt-8">
+            <div class="h-20 rounded-lg bg-gray-800 shimmer"></div>
+        </div>
+
+        <div id="response-container" class="mt-8 hidden">
+            <div class="bg-gray-800 rounded-lg p-6 neon-glow response-card">
+                <p id="response-text" class="text-white text-lg"></p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-12 text-center text-gray-400">
+            ⚡ Powered by TanuCanvas AI
+        </footer>
+    </div>
+
+    <script>
+        async function generateResponse() {
+            const promptInput = document.getElementById('prompt-input');
+            const generateBtn = document.getElementById('generate-btn');
+            const loadingDiv = document.getElementById('loading');
+            const responseContainer = document.getElementById('response-container');
+            const responseText = document.getElementById('response-text');
+
+            // Validate input
+            if (!promptInput.value.trim()) {
+                alert('Please enter a prompt first!');
+                return;
+            }
+
+            // Show loading, hide previous response
+            loadingDiv.classList.remove('hidden');
+            responseContainer.classList.add('hidden');
+            generateBtn.disabled = true;
+            generateBtn.classList.add('opacity-50');
+
+            try {
+                // Simulate API call (replace with actual API integration)
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                const mockResponse = `Here's a creative response to: "${promptInput.value.slice(0, 30)}..."`;
+
+                // Show response
+                responseText.textContent = mockResponse;
+                responseContainer.classList.remove('hidden');
+            } catch (error) {
+                alert('An error occurred. Please try again.');
+            } finally {
+                // Hide loading, enable button
+                loadingDiv.classList.add('hidden');
+                generateBtn.disabled = false;
+                generateBtn.classList.remove('opacity-50');
+            }
+        }
+
+        // Enable Enter key to generate
+        document.getElementById('prompt-input').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                generateResponse();
+            }
+        });
+    </script>
+<script>document.body.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); return }, { passive: false })</script>
+	</body>
+</html>
